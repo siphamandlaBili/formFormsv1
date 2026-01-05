@@ -57,9 +57,9 @@ function AnimatedIcons() {
   );
 }
 
-export default function AuthLayout({ children, title }) {
+export default function AuthLayout({ children}) {
   const { branding, features, statusBadge } = authData;
-  const { name, icon: BrandIcon, tagline } = branding;
+  const {tagline } = branding;
 
   return (
     <div className="min-h-screen flex flex-col md:flex-row bg-[#F5F7FA] text-gray-900 overflow-hidden">
@@ -67,7 +67,7 @@ export default function AuthLayout({ children, title }) {
       <div className="hidden md:flex md:w-1/2 bg-[#4CAF4F]/5 relative overflow-hidden">
        
         <motion.div 
-          className="absolute inset-0 bg-gradient-to-br from-[#4CAF4F]/10 via-transparent to-gray-100/50"
+          className="absolute inset-0 bg-linear-to-br from-[#4CAF4F]/10 via-transparent to-gray-100/50"
           animate={{
             background: [
               "radial-gradient(circle at 20% 50%, rgba(76, 175, 79, 0.1) 0%, transparent 50%)",
@@ -159,7 +159,7 @@ export default function AuthLayout({ children, title }) {
           {[...Array(20)].map((_, i) => (
             <motion.div
               key={i}
-              className="absolute h-1 bg-gradient-to-r from-transparent via-[#4CAF4F] to-transparent"
+              className="absolute h-1 bg-linear-to-r from-transparent via-[#4CAF4F] to-transparent"
               style={{
                 left: `${i * 5}%`,
                 bottom: (i * 23 + 17) % 100,

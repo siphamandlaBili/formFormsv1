@@ -12,6 +12,14 @@ Collect responses from multiple users
 
 View responses and basic analytics in-app
 
+**Tech Stack**
+
+- **Frontend**: Next.js - React framework for web applications
+- **Database**: PostgreSQL - Relational database for data storage
+- **ORM**: Drizzle ORM -Relational Mapping for data access
+- **Authentication**: Clerk - User authentication and management
+- **Styling**: Tailwind CSS - Utility-first CSS framework
+
 **Status**
 
 This project is actively under development.

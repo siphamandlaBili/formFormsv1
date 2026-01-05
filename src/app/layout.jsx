@@ -1,7 +1,7 @@
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import Header from "./_component/Header";
-import Footer from "./_component/Footer";
+import ConditionalFooter from "./_component/ConditionalFooter";
 import { ClerkProvider } from "@clerk/nextjs";
 
 const geistSans = Geist({
@@ -16,7 +16,7 @@ const geistMono = Geist_Mono({
 
 export const metadata = {
   title: "formforms",
-  description: "create forms with AI ,share with friends and see responses in app",
+  description: "create forms with AI friends and see responses in app",
   icons: {
     icon: "/favicon-v2.png",
   }
@@ -31,7 +31,7 @@ export default function RootLayout({ children }) {
         >
           <Header />
           {children}
-          <Footer />
+          <ConditionalFooter />
         </body>
       </html>
     </ClerkProvider>

@@ -1,10 +1,6 @@
 import { 
   Brain, 
-  Cpu, 
-  Zap, 
-  Code,
   Sparkles,
-  Bot,
   Network,
   Cloud,
   FormInput,

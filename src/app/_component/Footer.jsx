@@ -55,18 +55,6 @@ function Footer() {
             </ul>
           </div>
 
-          {/* Support Section */}
-          <div>
-            <h3 className="text-lg font-semibold mb-6">Support</h3>
-            <ul className="space-y-3">
-              <li><a href="#" className="text-gray-300 hover:text-white transition-colors">Help center</a></li>
-              <li><a href="#" className="text-gray-300 hover:text-white transition-colors">Terms of service</a></li>
-              <li><a href="#" className="text-gray-300 hover:text-white transition-colors">Legal</a></li>
-              <li><a href="#" className="text-gray-300 hover:text-white transition-colors">Privacy policy</a></li>
-              <li><a href="#" className="text-gray-300 hover:text-white transition-colors">Status</a></li>
-            </ul>
-          </div>
-
           {/* Newsletter Section */}
           <div>
             <h3 className="text-lg font-semibold mb-6">Stay up to date</h3>
