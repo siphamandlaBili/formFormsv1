@@ -20,7 +20,7 @@ function Hero() {
           <div className="mt-8 flex flex-wrap gap-4 justify-center lg:justify-start">
             <a 
               className="inline-block rounded border border-primary bg-primary px-6 py-3 font-medium text-white shadow-sm transition-colors hover:bg-primary/90" 
-              href="#"
+              href="/"
             >
               + Create AI Form
             </a>

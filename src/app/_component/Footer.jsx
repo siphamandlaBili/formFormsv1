@@ -1,6 +1,8 @@
 import React from 'react'
 import Image from 'next/image'
-import { Instagram, Twitter, Youtube, Send } from 'lucide-react'
+import InstagramIcon from '../../components/icons/InstagramIcon'
+import XIcon from '../../components/icons/XIcon'
+import CustomIcon from '../../components/icons/CustomIcon'
 
 function Footer() {
   return (
@@ -26,19 +28,14 @@ function Footer() {
 
             {/* Social Media Icons */}
             <div className="flex space-x-4">
-              <a href="#" className="text-gray-400 hover:text-white transition-colors">
-                <Instagram className="w-5 h-5" />
+              <a href="/" className="text-gray-400 hover:text-white transition-colors">
+                <InstagramIcon />
               </a>
-              <a href="#" className="text-gray-400 hover:text-white transition-colors">
-                <svg className="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
-                  <path d="M12 0C5.374 0 0 5.373 0 12s5.374 12 12 12 12-5.373 12-12S18.626 0 12 0zm5.568 8.16c-.169 1.858-.896 3.434-2.193 4.731-1.297 1.297-2.873 2.024-4.731 2.193-.677-.677-.677-1.794 0-2.47 1.297-.169 2.454-.642 3.462-1.65 1.008-1.008 1.481-2.165 1.65-3.462.677.677.677 1.793 0 2.47-.169-1.858-.896-3.434-2.193-4.731-1.297-1.297-2.873-2.024-4.731-2.193.677.677.677 1.794 0 2.47z"/>
-                </svg>
+              <a href="/" className="text-gray-400 hover:text-white transition-colors">
+                <CustomIcon />
               </a>
-              <a href="#" className="text-gray-400 hover:text-white transition-colors">
-                <Twitter className="w-5 h-5" />
-              </a>
-              <a href="#" className="text-gray-400 hover:text-white transition-colors">
-                <Youtube className="w-5 h-5" />
+              <a href="/" className="text-gray-400 hover:text-white transition-colors">
+                <XIcon />
               </a>
             </div>
           </div>
@@ -47,11 +44,11 @@ function Footer() {
           <div>
             <h3 className="text-lg font-semibold mb-6">Company</h3>
             <ul className="space-y-3">
-              <li><a href="#" className="text-gray-300 hover:text-white transition-colors">About us</a></li>
-              <li><a href="#" className="text-gray-300 hover:text-white transition-colors">Blog</a></li>
-              <li><a href="#" className="text-gray-300 hover:text-white transition-colors">Contact us</a></li>
-              <li><a href="#" className="text-gray-300 hover:text-white transition-colors">Pricing</a></li>
-              <li><a href="#" className="text-gray-300 hover:text-white transition-colors">Testimonials</a></li>
+              <li><a href="/" className="text-gray-300 hover:text-white transition-colors">About us</a></li>
+              <li><a href="/" className="text-gray-300 hover:text-white transition-colors">Blog</a></li>
+              <li><a href="/" className="text-gray-300 hover:text-white transition-colors">Contact us</a></li>
+              <li><a href="/" className="text-gray-300 hover:text-white transition-colors">Pricing</a></li>
+              <li><a href="/" className="text-gray-300 hover:text-white transition-colors">Testimonials</a></li>
             </ul>
           </div>
 
@@ -64,9 +61,6 @@ function Footer() {
                 placeholder="Your email address"
                 className="flex-1 px-4 py-3 bg-gray-700 text-white placeholder-gray-400 rounded-l-lg focus:outline-none focus:ring-2 focus:ring-primary"
               />
-              <button className="px-4 py-3 bg-primary hover:bg-primary/90 rounded-r-lg transition-colors">
-                <Send className="w-5 h-5" />
-              </button>
             </div>
           </div>
         </div>
