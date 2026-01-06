@@ -18,6 +18,7 @@ View responses and basic analytics in-app
 - **Database**: PostgreSQL - Relational database for data storage
 - **ORM**: Drizzle ORM -Relational Mapping for data access
 - **Authentication**: Clerk - User authentication and management
+- **AI**: Google Gemini API - AI-powered form generation and content creation
 - **Styling**: Tailwind CSS - Utility-first CSS framework
 
 **Status**
