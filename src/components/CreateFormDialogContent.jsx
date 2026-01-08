@@ -11,11 +11,14 @@ import { generateFormWithAI } from '@/configs/ai-model'
 import { useUser } from '@clerk/nextjs'
 import { db } from '@/configs'
 import { jsonForms } from '@/configs/schema'
+import { useRouter } from 'next/navigation'
+import { Loader2 } from 'lucide-react'
 
 function CreateFormDialogContent() {
   const [userInput, setUserInput] = useState("")
   const [loading, setLoading] = useState(false)
   const {user} = useUser();
+  const router = useRouter();
   
 
   const onCreateFormClick = async () => {
@@ -33,7 +36,9 @@ function CreateFormDialogContent() {
         createdAt: new Date().toISOString(),
       }).returning({ id: jsonForms.id });
 
-        console.log('Form created with ID:', response)
+      if(response[0]?.id){
+        router.push(`/edit-form/${response[0].id}`);
+      }
     } catch (error) {
       console.error('Error creating form:', error)
     } finally {
@@ -61,7 +66,7 @@ function CreateFormDialogContent() {
           onClick={onCreateFormClick}
           disabled={!userInput.trim() || loading}
         >
-          {loading ? 'Creating...' : 'Create'}
+          {loading ? <Loader2 className='animate-spin'/> : 'Create'}
         </Button>
       </div>
     </DialogContent>
