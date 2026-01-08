@@ -45,10 +45,8 @@ export async function generateFormWithAI(userPrompt) {
     const response = await result.response;
     let text = response.text();
     
-    // Clean the response text to remove markdown formatting
     text = text.replace(/```json\s*/g, '').replace(/```\s*/g, '').trim();
     
-    // Parse the JSON response
     const formData = JSON.parse(text);
     
     return formData;

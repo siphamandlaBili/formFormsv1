@@ -15,7 +15,7 @@ function Header() {
             <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8'>
                 <div className='flex items-center justify-between h-16'>
                     <div className='flex items-center'>
-                        <div className='shrink-0'>
+                        <div className='shrink-0 transform transition-transform duration-300 hover:scale-105'>
                             <Image src='/formforms.png' width={150} height={40} alt='logo' />
                         </div>
                     </div>
@@ -23,8 +23,9 @@ function Header() {
                     {/* Desktop Navigation */}
                     {!isSignedIn && <nav className='hidden md:flex space-x-8'>
                         {links.map((link) => (
-                            <a key={link.name} href={link.href} className='text-gray-700 hover:text-gray-900 px-3 py-2 text-sm font-medium transition-colors'>
+                            <a key={link.name} href={link.href} className='text-gray-700 hover:text-primary px-3 py-2 text-sm font-medium transition-all duration-300 relative group'>
                                 {link.name}
+                                <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-primary transition-all duration-300 group-hover:w-full"></span>
                             </a>
                         ))}
                     </nav>}
@@ -40,9 +41,9 @@ function Header() {
                         ) : (
                             <>
                                 <SignInButton>
-                                    <Button className='hidden md:flex px-6 py-2 rounded-md font-medium items-center gap-2'>
+                                    <Button className='hidden md:flex px-6 py-2 rounded-lg font-medium items-center gap-2 transition-all duration-300 hover:scale-105 hover:shadow-lg group'>
                                         Get Started
-                                        <svg className='w-4 h-4' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
+                                        <svg className='w-4 h-4 transition-transform duration-300 group-hover:translate-x-1' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
                                             <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M9 5l7 7-7 7' />
                                         </svg>
                                     </Button>
