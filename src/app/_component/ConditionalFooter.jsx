@@ -6,10 +6,10 @@ import Footer from "./Footer";
 export default function ConditionalFooter() {
   const pathname = usePathname();
   
-  // Don't show footer on dashboard pages
-  const isDashboard = pathname?.startsWith('/dashboard');
+  // Only show footer on landing page (root path)
+  const isLandingPage = pathname === '/';
   
-  if (isDashboard) {
+  if (!isLandingPage) {
     return null;
   }
   
