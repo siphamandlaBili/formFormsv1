@@ -1,4 +1,3 @@
-import React from 'react'
 import Image from 'next/image'
 import InstagramIcon from '../../components/icons/InstagramIcon'
 import XIcon from '../../components/icons/XIcon'

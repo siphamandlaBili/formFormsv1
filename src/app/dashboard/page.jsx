@@ -1,4 +1,3 @@
-import React from 'react'
 import CreateForm from './_components/CreateForm'
 function Dashboard() {
   return (

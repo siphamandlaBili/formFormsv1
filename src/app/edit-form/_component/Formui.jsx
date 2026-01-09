@@ -1,43 +1,48 @@
-import React from 'react'
-import { Button } from '@/components/ui/button'
+
+import React, { useState } from 'react'
 import { Separator } from '@/components/ui/separator'
 import { useFormState } from '@/hooks/useFormState'
-import { useFormValidation } from '@/hooks/useFormValidation'
 import { createField } from '@/utils/fieldFactory'
+import FieldEdit from './FieldEdit'
+import FormHeaderEdit from './FormHeaderEdit'
 
-function Formui({ jsonFormData, isLoading = false }) {
+function Formui({ jsonFormData, isLoading = false, onUpdateFormData }) {
   const formState = useFormState()
-  const { validateForm } = useFormValidation()
-  
-  const {
-    formValues,
-    isSubmitting,
-    touchAllFields,
-    setFieldErrors,
-    clearForm,
-    setSubmitting
-  } = formState
+  const [editingFieldIndex, setEditingFieldIndex] = useState(null)
 
-  // Handle form submission
-  const handleSubmit = async (e) => {
-    e.preventDefault()
-    touchAllFields()
-    
-    const validation = validateForm(jsonFormData, formValues)
-    setFieldErrors(validation.errors)
-    
-    if (validation.isValid) {
-      setSubmitting(true)
-      try {
-        // Simulate API call
-        await new Promise(resolve => setTimeout(resolve, 1000))
-        console.log('Form submitted:', formValues)
-        // Handle form submission here
-      } catch (error) {
-        console.error('Submission error:', error)
-      } finally {
-        setSubmitting(false)
+  // Handle field update
+  const handleUpdateField = (fieldIndex, updatedField) => {
+    if (onUpdateFormData && jsonFormData) {
+      const updatedFields = [...jsonFormData.fields]
+      updatedFields[fieldIndex] = updatedField
+      
+      const updatedFormData = {
+        ...jsonFormData,
+        fields: updatedFields
       }
+      
+      onUpdateFormData(updatedFormData)
+    }
+  }
+
+  // Handle field deletion
+  const handleDeleteField = async (fieldIndex) => {
+    try {
+      if (onUpdateFormData && jsonFormData) {
+        const updatedFields = jsonFormData.fields.filter((_, index) => index !== fieldIndex)
+        
+        const updatedFormData = {
+          ...jsonFormData,
+          fields: updatedFields
+        }
+        
+        await onUpdateFormData(updatedFormData)
+        
+        // Close any open edit popover
+        setEditingFieldIndex(null)
+      }
+    } catch (error) {
+      console.error('Error deleting field:', error)
     }
   }
 
@@ -71,85 +76,44 @@ function Formui({ jsonFormData, isLoading = false }) {
     <div className="">
       <div className="">
         {/* Form Header */}
-        <div className="pb-4">
-          <div className="space-y-2">
-            <div className="flex items-start justify-between">
-              <div className="flex-1 text-center">
-                <h1 className="text-2xl font-semibold text-gray-900">
-                  {jsonFormData.title}
-                </h1>
-                {jsonFormData.subheading && (
-                  <p className="text-lg text-gray-600 mt-1">
-                    {jsonFormData.subheading}
-                  </p>
-                )}
-              </div>
-              {jsonFormData.required && (
-                <span className="text-xs font-medium text-red-600 px-2 py-1 rounded-sm">
-                  * Required
-                </span>
-              )}
-            </div>
-            
-            {jsonFormData.description && (
-              <>
-                <Separator className="my-3" />
-                <p className="text-sm text-gray-600">
-                  {jsonFormData.description}
-                </p>
-              </>
-            )}
-          </div>
-        </div>
+        <FormHeaderEdit 
+          jsonFormData={jsonFormData} 
+          onUpdateFormData={onUpdateFormData}
+        />
 
         <Separator />
 
         {/* Form Content */}
         <div className="pt-6">
-          <form onSubmit={handleSubmit} className="space-y-8">
+          <form className="space-y-8">
             {jsonFormData.fields?.map((field, index) => {
               const fieldName = field.fieldName || field.name
               return (
-                <div key={index}>
-                  {createField(field, fieldName, formState)}
+                <div key={index} className="flex items-start justify-between gap-3">
+                  <div className="flex-1">
+                    {createField(field, fieldName, formState)}
+                  </div>
+                  <div className="pt-8">
+                    <FieldEdit 
+                      field={field}
+                      fieldName={fieldName}
+                      onUpdateField={(updatedField) => handleUpdateField(index, updatedField)}
+                      onDeleteField={() => handleDeleteField(index)}
+                      isOpen={editingFieldIndex === index}
+                      onOpenChange={(open) => setEditingFieldIndex(open ? index : null)}
+                    />
+                  </div>
                 </div>
               )
             })}
 
             {/* Form Actions */}
-            <div className="pt-6 border-t">
-              <div className="flex items-center justify-between">
-                <Button
-                  type="button"
-                  variant="ghost"
-                  onClick={clearForm}
-                  className="text-gray-600 hover:text-gray-900"
-                >
-                  Clear all
-                </Button>
-                
-                <Button
-                  type="submit"
-                  disabled={isSubmitting}
-                  className="min-w-[120px]"
-                >
-                  {isSubmitting ? (
-                    <>
-                      <div className="h-4 w-4 border-2 border-white border-t-transparent rounded-full animate-spin mr-2" />
-                      Submitting...
-                    </>
-                  ) : (
-                    'Submit'
-                  )}
-                </Button>
-              </div>
-              
               <div className="mt-4 text-center">
                 <p className="text-xs text-gray-400">
-                  By submitting this form, you confirm that the information provided is accurate.
+                  form created in formforms AI
                 </p>
               </div>
-            </div>
+            
           </form>
         </div>
       </div>

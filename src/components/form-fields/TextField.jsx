@@ -20,14 +20,7 @@ const TextField = ({
     onChange: (e) => onChange(fieldName, e.target.value),
     onBlur: () => onBlur(fieldName),
     placeholder: field.placeholder || `Enter ${field.label?.toLowerCase() || fieldName}`,
-    required: field.required,
-    className: `transition-colors duration-200 ${
-      hasError 
-        ? 'border-red-500 focus-visible:ring-red-500/20 focus-visible:border-red-500' 
-        : isFilled && !hasError
-          ? 'border-green-500 focus-visible:border-green-500'
-          : ''
-    }`
+    required: field.required
   }
 
   const getInputType = () => {
@@ -41,10 +34,6 @@ const TextField = ({
       case 'date': return 'date'
       default: return 'text'
     }
-  }
-
-  const shouldShowSuccessIcon = () => {
-    return isFilled && !hasError && !['password', 'number', 'date'].includes(fieldType?.toLowerCase())
   }
 
   const getAdditionalProps = () => {
@@ -63,15 +52,23 @@ const TextField = ({
   }
 
   return (
-    <div className="relative">
+    <div className={`relative ${
+      fieldType?.toLowerCase() === 'text' || fieldType?.toLowerCase() === 'input' ? 'w-full' : ''
+    }`}>
       <Input
         {...commonProps}
         {...getAdditionalProps()}
         type={getInputType()}
+        className={`transition-colors duration-200 ${
+          fieldType?.toLowerCase() === 'text' || fieldType?.toLowerCase() === 'input' ? 'w-full' : ''
+        } ${
+          hasError 
+            ? 'border-red-500 focus-visible:ring-red-500/20 focus-visible:border-red-500' 
+            : isFilled && !hasError
+              ? 'border-green-500 focus-visible:border-green-500'
+              : ''
+        }`}
       />
-      {shouldShowSuccessIcon() && (
-        <CheckCircle2 className="absolute right-3 top-3 h-4 w-4 text-green-500" />
-      )}
     </div>
   )
 }

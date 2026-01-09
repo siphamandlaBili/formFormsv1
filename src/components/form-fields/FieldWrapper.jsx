@@ -1,4 +1,3 @@
-import React from 'react'
 import { AlertCircle, HelpCircle } from 'lucide-react'
 
 const FieldWrapper = ({ 

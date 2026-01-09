@@ -1,4 +1,3 @@
-import React from 'react'
 import { Textarea } from '@/components/ui/textarea'
 import { CheckCircle2 } from 'lucide-react'
 

@@ -40,6 +40,29 @@ function EditForm({ params }) {
         }
     }
 
+    const updateFormData = async (updatedFormData) => {
+        try {
+            if (!resolvedParams?.formId || !user?.primaryEmailAddress?.emailAddress) {
+                console.error('Missing required data for update');
+                return;
+            }
+
+            await db.update(jsonForms)
+                .set({ 
+                    jsonForm: JSON.stringify(updatedFormData) 
+                })
+                .where(and(
+                    eq(jsonForms.id, Number(resolvedParams.formId)), 
+                    eq(jsonForms.createdBy, user.primaryEmailAddress.emailAddress)
+                ));
+            
+            setJsonFormData(updatedFormData);
+            console.log('Form updated successfully');
+        } catch (error) {
+            console.error('Error updating form:', error);
+        }
+    }
+
     console.log('Fetched JSON Form Data:', jsonFormData);
     return (
         <div className="px-10">
@@ -52,7 +75,11 @@ function EditForm({ params }) {
                 </div>
                 <div className="md:col-span-2 border rounded-lg overflow-hidden flex flex-col">
                     <div className="flex-1 overflow-y-auto p-5">
-                        <Formui jsonFormData={jsonFormData} isLoading={isLoading}/>
+                        <Formui 
+                            jsonFormData={jsonFormData} 
+                            isLoading={isLoading}
+                            onUpdateFormData={updateFormData}
+                        />
                     </div>
                 </div>
             </div>

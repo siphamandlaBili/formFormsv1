@@ -1,5 +1,5 @@
 "use client"
-import React, { useEffect } from 'react'
+import { useEffect } from 'react'
 import { menuList } from '@/data/data'
 import { usePathname } from 'next/navigation'
 import { Progress } from '@/components/ui/progress';
