@@ -6,6 +6,7 @@ import { createField } from '@/utils/fieldFactory'
 import FieldEdit from './FieldEdit'
 import FormHeaderEdit from './FormHeaderEdit'
 import AddFieldComponent from './AddFieldComponent'
+import toast from 'daisyui/components/toast'
 
 function Formui({ jsonFormData, isLoading = false, onUpdateFormData }) {
   const formState = useFormState()
@@ -43,7 +44,7 @@ function Formui({ jsonFormData, isLoading = false, onUpdateFormData }) {
         setEditingFieldIndex(null)
       }
     } catch (error) {
-      console.error('Error deleting field:', error)
+      toast.error('Failed to delete field')
     }
   }
 
@@ -61,7 +62,7 @@ function Formui({ jsonFormData, isLoading = false, onUpdateFormData }) {
         await onUpdateFormData(updatedFormData)
       }
     } catch (error) {
-      console.error('Error adding field:', error)
+      toast.error('Failed to add field')
     }
   }
 

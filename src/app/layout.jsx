@@ -3,6 +3,7 @@ import "./globals.css";
 import Header from "./_component/Header";
 import ConditionalFooter from "./_component/ConditionalFooter";
 import { ClerkProvider } from "@clerk/nextjs";
+import { Toaster } from "sonner";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -34,6 +35,7 @@ export default function RootLayout({ children }) {
             {children}
           </div>
           <ConditionalFooter />
+          <Toaster />
         </body>
       </html>
     </ClerkProvider>

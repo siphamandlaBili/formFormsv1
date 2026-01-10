@@ -1,5 +1,6 @@
 import { DeleteIcon, Edit } from 'lucide-react';
 import { useState, useEffect, useRef } from 'react';
+import { toast } from 'sonner';
 import {
     Popover,
     PopoverContent,
@@ -58,11 +59,12 @@ function FieldEdit({ field, fieldName, onUpdateField, onDeleteField, isOpen, onO
                     placeholder,
                     required
                 })
-                // Close the popover after successful save
+                
                 onOpenChange(false)
-                console.log('Field updated successfully:', fieldName)
+                toast.success('Field updated successfully!')
+                
             } catch (error) {
-                console.error('Error updating field:', error)
+                toast.error('Failed to update field')
             }
         }
     }
@@ -71,18 +73,15 @@ function FieldEdit({ field, fieldName, onUpdateField, onDeleteField, isOpen, onO
         try {
             if (onDeleteField) {
                 await onDeleteField()
-                console.log('Field deleted successfully:', fieldName)
+                toast.success('Field deleted successfully!')
             }
         } catch (error) {
-            console.error('Error deleting field:', error)
+            toast.error('Failed to delete field')
         }
     }
 
     const handleEditClick = () => {
-        console.log('Edit clicked for field:', fieldName)
-        console.log('Current open state:', isOpen)
         onOpenChange(!isOpen)
-        console.log('Setting open to:', !isOpen)
     }
     return (
         <div className='flex gap-1 relative'>
@@ -148,19 +147,19 @@ function FieldEdit({ field, fieldName, onUpdateField, onDeleteField, isOpen, onO
                 </AlertDialogTrigger>
                 <AlertDialogContent>
                     <AlertDialogHeader>
-                        <AlertDialogTitle>Delete Field</AlertDialogTitle>
+                        <AlertDialogTitle >Delete Field</AlertDialogTitle>
                         <AlertDialogDescription>
                             Are you sure you want to delete the field "{field?.label || fieldName}"? 
                             This action cannot be undone and will permanently remove this field from your form.
                         </AlertDialogDescription>
                     </AlertDialogHeader>
                     <AlertDialogFooter>
-                        <AlertDialogCancel>Cancel</AlertDialogCancel>
+                        <AlertDialogCancel className="border-primary text-primary hover:text-white hover:bg-primary/90 focus:ring-primary cursor-pointer">Cancel</AlertDialogCancel>
                         <AlertDialogAction 
                             onClick={handleDelete}
-                            className="bg-red-600 hover:bg-red-700 focus:ring-red-600"
+                            className="bg-primary hover:bg-primary/90 focus:ring-primary cursor-pointer"
                         >
-                            Delete Field
+                            Continue
                         </AlertDialogAction>
                     </AlertDialogFooter>
                 </AlertDialogContent>

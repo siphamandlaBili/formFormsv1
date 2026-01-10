@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react'
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
 import { Button } from '@/components/ui/button'
+import { toast } from 'sonner'
 
 function FormHeaderEdit({ jsonFormData, onUpdateFormData }) {
     const [editingField, setEditingField] = useState(null)
@@ -49,8 +50,9 @@ function FormHeaderEdit({ jsonFormData, onUpdateFormData }) {
             
             await onUpdateFormData(updatedFormData)
             setEditingField(null)
+            toast.success('Form updated successfully!')
         } catch (error) {
-            console.error('Error updating form header:', error)
+            toast.error('Failed to update form')
         }
     }
 

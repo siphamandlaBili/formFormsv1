@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import { Plus, X } from 'lucide-react'
+import { toast } from 'sonner'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
@@ -61,6 +62,7 @@ function AddFieldComponent({ onAddField }) {
 
     const handleSubmit = () => {
         if (!fieldType || !fieldLabel.trim()) {
+            toast.error('Please fill in all required fields')
             return
         }
 
@@ -85,6 +87,7 @@ function AddFieldComponent({ onAddField }) {
         }
 
         onAddField(newField)
+        toast.success('Field added successfully!')
         handleClose()
     }
 

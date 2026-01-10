@@ -1,5 +1,6 @@
 "use client"
 import { useState } from 'react'
+import { toast } from 'sonner'
 import {
   DialogContent,
   DialogHeader,
@@ -22,13 +23,16 @@ function CreateFormDialogContent() {
   
 
   const onCreateFormClick = async () => {
-    if (!userInput.trim()) return
+    if (!userInput.trim()) {
+      toast.error('Please describe your form')
+      return
+    }
     
     setLoading(true)
     try {
       const formData = await generateFormWithAI(userInput)
       setUserInput("")
-      console.log('Generated Form Data:', formData)
+  
       const response = await db.insert(jsonForms)
       .values({
         jsonForm: formData,
@@ -37,10 +41,11 @@ function CreateFormDialogContent() {
       }).returning({ id: jsonForms.id });
 
       if(response[0]?.id){
+        toast.success('Form created successfully!')
         router.push(`/edit-form/${response[0].id}`);
       }
     } catch (error) {
-      console.error('Error creating form:', error)
+      toast.error('Failed to create form')
     } finally {
       setLoading(false)
     }

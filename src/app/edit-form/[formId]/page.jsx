@@ -8,6 +8,7 @@ import { useEffect, use, useState } from "react"
 import { ArrowLeft } from "lucide-react"
 import { useRouter } from "next/navigation"
 import Formui from "../_component/Formui"
+import toast from "daisyui/components/toast"
 
 function EditForm({ params }) {
     const { user } = useUser()
@@ -22,7 +23,7 @@ function EditForm({ params }) {
     
     const getFormData = async () => {
         if (!resolvedParams?.formId || !user?.primaryEmailAddress?.emailAddress) {
-            console.log('Missing required data:', { formId: resolvedParams?.formId, userEmail: user?.primaryEmailAddress?.emailAddress });
+            toast.error('Missing required data to fetch form');
             setIsLoading(false);
             return;
         }
@@ -34,7 +35,7 @@ function EditForm({ params }) {
             
             setJsonFormData(JSON.parse(result[0]?.jsonForm));
         } catch (error) {
-            console.error('Error fetching form data:', error);
+            toast.error('Error fetching form data');
         } finally {
             setIsLoading(false);
         }
@@ -43,7 +44,7 @@ function EditForm({ params }) {
     const updateFormData = async (updatedFormData) => {
         try {
             if (!resolvedParams?.formId || !user?.primaryEmailAddress?.emailAddress) {
-                console.error('Missing required data for update');
+                toast.error('Missing required data for update');
                 return;
             }
 
@@ -57,13 +58,12 @@ function EditForm({ params }) {
                 ));
             
             setJsonFormData(updatedFormData);
-            console.log('Form updated successfully');
+            toast.success('Form updated successfully!');
         } catch (error) {
-            console.error('Error updating form:', error);
+            toast.error('Failed to update form');
         }
     }
 
-    console.log('Fetched JSON Form Data:', jsonFormData);
     return (
         <div className="px-10">
             <button onClick={() => router.back()} className="flex gap-2 items-center my-5 cursor-pointer hover:font-semibold">
