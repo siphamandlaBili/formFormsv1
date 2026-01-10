@@ -17,7 +17,7 @@ const FieldWrapper = ({
             htmlFor={fieldName} 
             className="text-sm font-medium text-gray-900"
           >
-            {field.label || fieldName}
+            {field.label || field.fieldLabel || fieldName}
             {field.required && <span className="text-red-500 ml-1">*</span>}
           </label>
           

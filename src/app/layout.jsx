@@ -27,10 +27,12 @@ export default function RootLayout({ children }) {
     <ClerkProvider>
       <html lang="en">
         <body
-          className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+          className={`${geistSans.variable} ${geistMono.variable} antialiased overflow-hidden`}
         >
           <Header />
-          {children}
+          <div className="overflow-hidden">
+            {children}
+          </div>
           <ConditionalFooter />
         </body>
       </html>

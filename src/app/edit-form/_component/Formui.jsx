@@ -5,6 +5,7 @@ import { useFormState } from '@/hooks/useFormState'
 import { createField } from '@/utils/fieldFactory'
 import FieldEdit from './FieldEdit'
 import FormHeaderEdit from './FormHeaderEdit'
+import AddFieldComponent from './AddFieldComponent'
 
 function Formui({ jsonFormData, isLoading = false, onUpdateFormData }) {
   const formState = useFormState()
@@ -43,6 +44,24 @@ function Formui({ jsonFormData, isLoading = false, onUpdateFormData }) {
       }
     } catch (error) {
       console.error('Error deleting field:', error)
+    }
+  }
+
+  // Handle adding new field
+  const handleAddField = async (newField) => {
+    try {
+      if (onUpdateFormData && jsonFormData) {
+        const updatedFields = [...(jsonFormData.fields || []), newField]
+        
+        const updatedFormData = {
+          ...jsonFormData,
+          fields: updatedFields
+        }
+        
+        await onUpdateFormData(updatedFormData)
+      }
+    } catch (error) {
+      console.error('Error adding field:', error)
     }
   }
 
@@ -106,6 +125,11 @@ function Formui({ jsonFormData, isLoading = false, onUpdateFormData }) {
                 </div>
               )
             })}
+
+            {/* Add Field Component */}
+            <div className="pt-4">
+              <AddFieldComponent onAddField={handleAddField} />
+            </div>
 
             {/* Form Actions */}
               <div className="mt-4 text-center">
