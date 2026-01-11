@@ -8,7 +8,7 @@ import { useEffect, use, useState } from "react"
 import { ArrowLeft } from "lucide-react"
 import { useRouter } from "next/navigation"
 import Formui from "../_component/Formui"
-import toast from "daisyui/components/toast"
+import { toast } from "sonner"
 
 function EditForm({ params }) {
     const { user } = useUser()

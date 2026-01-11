@@ -45,7 +45,7 @@ function CreateFormDialogContent() {
         router.push(`/edit-form/${response[0].id}`);
       }
     } catch (error) {
-      toast.error('Failed to create form')
+      toast.error(error?.message || 'Failed to create form')
     } finally {
       setLoading(false)
     }

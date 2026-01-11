@@ -10,6 +10,16 @@ const TextareaField = ({
   hasError, 
   isFilled 
 }) => {
+  const getValidationClasses = () => {
+    if (hasError) {
+      return 'border-red-500 focus-visible:ring-red-500/20 focus-visible:border-red-500'
+    }
+    if (isFilled && !hasError) {
+      return 'border-green-500 focus-visible:border-green-500'
+    }
+    return ''
+  }
+
   const commonProps = {
     id: fieldName,
     name: fieldName,
@@ -19,13 +29,7 @@ const TextareaField = ({
     placeholder: field.placeholder || `Enter ${field.label?.toLowerCase() || fieldName}`,
     required: field.required,
     rows: field.rows || 4,
-    className: `transition-colors duration-200 ${
-      hasError 
-        ? 'border-red-500 focus-visible:ring-red-500/20 focus-visible:border-red-500' 
-        : isFilled && !hasError
-          ? 'border-green-500 focus-visible:border-green-500'
-          : ''
-    }`
+    className: `transition-colors duration-200 ${getValidationClasses()}`
   }
 
   return (

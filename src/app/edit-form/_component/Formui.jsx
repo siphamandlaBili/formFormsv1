@@ -6,7 +6,7 @@ import { createField } from '@/utils/fieldFactory'
 import FieldEdit from './FieldEdit'
 import FormHeaderEdit from './FormHeaderEdit'
 import AddFieldComponent from './AddFieldComponent'
-import toast from 'daisyui/components/toast'
+import { toast } from 'sonner'
 
 function Formui({ jsonFormData, isLoading = false, onUpdateFormData }) {
   const formState = useFormState()

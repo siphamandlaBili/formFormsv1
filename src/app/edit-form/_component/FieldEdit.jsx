@@ -2,11 +2,6 @@ import { DeleteIcon, Edit } from 'lucide-react';
 import { useState, useEffect, useRef } from 'react';
 import { toast } from 'sonner';
 import {
-    Popover,
-    PopoverContent,
-    PopoverTrigger,
-} from "@/components/ui/popover"
-import {
     AlertDialog,
     AlertDialogAction,
     AlertDialogCancel,
@@ -64,7 +59,7 @@ function FieldEdit({ field, fieldName, onUpdateField, onDeleteField, isOpen, onO
                 toast.success('Field updated successfully!')
                 
             } catch (error) {
-                toast.error('Failed to update field')
+                toast.error(error?.message || 'Failed to update field')
             }
         }
     }
@@ -76,7 +71,7 @@ function FieldEdit({ field, fieldName, onUpdateField, onDeleteField, isOpen, onO
                 toast.success('Field deleted successfully!')
             }
         } catch (error) {
-            toast.error('Failed to delete field')
+            toast.error(error?.message || 'Failed to delete field')
         }
     }
 
@@ -93,7 +88,7 @@ function FieldEdit({ field, fieldName, onUpdateField, onDeleteField, isOpen, onO
             {isOpen && (
                 <div 
                     ref={popoverRef}
-                    className="absolute top-8 right-8 w-80 bg-white border border-gray-200 shadow-lg rounded-md p-4 z-[9999]"
+                    className="absolute top-8 right-8 w-80 bg-white border border-gray-200 shadow-lg rounded-md p-4 z-2"
                 >
                     <div className="space-y-4">
                         <h3 className="text-lg font-semibold">Edit Field: {fieldName}</h3>

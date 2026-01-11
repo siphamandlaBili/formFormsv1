@@ -17,13 +17,13 @@ function SideNav() {
                     <div key={index} className="relative group">
                         <h2 className={`flex items-center gap-3 lg:p-4 p-2 mb-1 text-gray-700 rounded-xl cursor-pointer transition-all duration-300 lg:justify-start justify-center transform hover:scale-105
                         ${path == menu.path 
-                            ? 'bg-gradient-to-r from-primary to-primary/80 text-white shadow-lg' 
-                            : 'hover:bg-gradient-to-r hover:from-primary/10 hover:to-primary/5 hover:text-primary'
+                            ? 'bg-linear-to-r from-primary to-primary/80 text-white shadow-lg' 
+                            : 'hover:bg-linear-to-r hover:from-primary/10 hover:to-primary/5 hover:text-primary'
                         }
                         `}
                         style={{ animationDelay: `${index * 100}ms` }}
                         >
-                            <menu.icon className="flex-shrink-0 transition-transform duration-300 group-hover:scale-110" />
+                            <menu.icon className="shrink-0 transition-transform duration-300 group-hover:scale-110" />
                             <span className="lg:block hidden transition-all duration-300">{menu.name}</span>
                         </h2>
                         {/* Enhanced Tooltip for medium and small screens */}

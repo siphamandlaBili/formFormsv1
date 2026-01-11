@@ -65,21 +65,25 @@ User description:
 
 export async function generateFormWithAI(userPrompt) {
   try {
-    const genAI = new GoogleGenerativeAI(process.env.NEXT_PUBLIC_GEMINI_API_KEY);
+    const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
     const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
-    
+
     const prompt = AI_PROMPT.replace('<<USER_PROMPT>>', userPrompt);
-    
+
     const result = await model.generateContent(prompt);
-    const response = await result.response;
+    const response = result.response;
     let text = response.text();
-    
-    text = text.replace(/```json\s*/g, '').replace(/```\s*/g, '').trim();
-    
+
+    text = text
+      .replaceAll('```json', '')
+      .replaceAll('```', '')
+      .trim();
+
+
     const formData = JSON.parse(text);
-    
+
     return formData;
   } catch (error) {
-    throw new Error('Failed to generate form. Please try again.');
+    throw new Error(error?.message || 'Failed to generate form. Please try again.');
   }
 }

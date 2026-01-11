@@ -51,6 +51,16 @@ const TextField = ({
     return props
   }
 
+  const getValidationClasses = () => {
+    if (hasError) {
+      return 'border-red-500 focus-visible:ring-red-500/20 focus-visible:border-red-500'
+    }
+    if (isFilled && !hasError) {
+      return 'border-green-500 focus-visible:border-green-500'
+    }
+    return ''
+  }
+
   return (
     <div className={`relative ${
       fieldType?.toLowerCase() === 'text' || fieldType?.toLowerCase() === 'input' ? 'w-full' : ''
@@ -61,13 +71,7 @@ const TextField = ({
         type={getInputType()}
         className={`transition-colors duration-200 ${
           fieldType?.toLowerCase() === 'text' || fieldType?.toLowerCase() === 'input' ? 'w-full' : ''
-        } ${
-          hasError 
-            ? 'border-red-500 focus-visible:ring-red-500/20 focus-visible:border-red-500' 
-            : isFilled && !hasError
-              ? 'border-green-500 focus-visible:border-green-500'
-              : ''
-        }`}
+        } ${getValidationClasses()}`}
       />
     </div>
   )

@@ -40,7 +40,7 @@ const FieldWrapper = ({
       
       {hasError && (
         <div className="flex items-center gap-1 text-red-600 text-sm">
-          <AlertCircle className="h-3 w-3 flex-shrink-0" />
+          <AlertCircle className="h-3 w-3 shrink-0" />
           <span>{error}</span>
         </div>
       )}

@@ -1,0 +1,17 @@
+[build]
+  command = "npm run build"
+  publish = ".next"
+
+[build.environment]
+  NODE_VERSION = "18"
+
+[[plugins]]
+  package = "@netlify/plugin-nextjs"
+
+[template.environment]
+  CLERK_SECRET_KEY = "Add your Clerk Secret Key"
+  NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY = "Add your Clerk Publishable Key"
+  NEXT_PUBLIC_CLERK_SIGN_IN_URL = "/sign-in"
+  NEXT_PUBLIC_CLERK_SIGN_UP_URL = "/sign-up"
+  DATABASE_URL = "Add your Neon Database URL"
+  GEMINI_API_KEY = "Add your Gemini API Key"
