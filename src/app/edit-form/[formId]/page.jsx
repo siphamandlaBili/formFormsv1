@@ -1,8 +1,5 @@
 "use client"
 
-// Force dynamic rendering for this page
-export const dynamic = 'force-dynamic'
-
 import { db } from "@/configs"
 import { jsonForms } from "@/configs/schema"
 import { and, eq } from "drizzle-orm"
