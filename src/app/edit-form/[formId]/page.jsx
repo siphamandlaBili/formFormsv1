@@ -41,7 +41,10 @@ function EditForm({ params }) {
         }
     }
 
-    const updateFormData = async (updatedFormData) => {
+    const updateFormData = async (updatedFormData, showSuccessToast = true) => {
+        // Update local state immediately for instant UI feedback
+        setJsonFormData(updatedFormData);
+        
         try {
             if (!resolvedParams?.formId || !user?.primaryEmailAddress?.emailAddress) {
                 toast.error('Missing required data for update');
@@ -57,10 +60,13 @@ function EditForm({ params }) {
                     eq(jsonForms.createdBy, user.primaryEmailAddress.emailAddress)
                 ));
             
-            setJsonFormData(updatedFormData);
-            toast.success('Form updated successfully!');
+            if (showSuccessToast) {
+                toast.success('Form updated successfully!');
+            }
         } catch (error) {
             toast.error('Failed to update form');
+            // Optionally: revert the optimistic update on error
+            // await getFormData();
         }
     }
 
