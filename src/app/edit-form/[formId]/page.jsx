@@ -8,6 +8,7 @@ import { useEffect, use, useState } from "react"
 import { ArrowLeft } from "lucide-react"
 import { useRouter } from "next/navigation"
 import Formui from "../_component/Formui"
+import ThemeController from "../_component/ThemeController"
 import { toast } from "sonner"
 
 function EditForm({ params }) {
@@ -76,8 +77,11 @@ function EditForm({ params }) {
                 <ArrowLeft /> Back
             </button>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4 h-[calc(100vh-120px)]">
-                <div className="p-5 border rounded-lg shadow-md">
-                    controller
+                <div className="p-5 border rounded-lg shadow-md overflow-hidden">
+                    <ThemeController 
+                        jsonFormData={jsonFormData}
+                        onUpdateFormData={updateFormData}
+                    />
                 </div>
                 <div className="md:col-span-2 border rounded-lg overflow-hidden flex flex-col">
                     <div className="flex-1 overflow-y-auto p-5">

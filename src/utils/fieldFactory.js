@@ -5,7 +5,7 @@ import SelectField from '@/components/form-fields/SelectField'
 import RadioField from '@/components/form-fields/RadioField'
 import CheckboxField from '@/components/form-fields/CheckboxField'
 
-export const createField = (field, fieldName, formState) => {
+export const createField = (field, fieldName, formState, theme = {}) => {
   const { formValues, errors, touched, handleInputChange, handleBlur } = formState
   const fieldType = field.fieldType || field.type
   const value = formValues[fieldName]
@@ -21,7 +21,8 @@ export const createField = (field, fieldName, formState) => {
     onChange: handleInputChange,
     onBlur: handleBlur,
     hasError,
-    isFilled
+    isFilled,
+    theme
   }
 
   const renderFieldComponent = () => {
@@ -61,6 +62,7 @@ export const createField = (field, fieldName, formState) => {
       fieldName={fieldName}
       error={error}
       touched={isFieldTouched}
+      theme={theme}
     >
       {renderFieldComponent()}
     </FieldWrapper>

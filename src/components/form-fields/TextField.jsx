@@ -9,7 +9,8 @@ const TextField = ({
   onChange, 
   onBlur, 
   hasError, 
-  isFilled 
+  isFilled,
+  theme = {} 
 }) => {
   const fieldType = field.fieldType || field.type
 
@@ -72,6 +73,10 @@ const TextField = ({
         className={`transition-colors duration-200 ${
           fieldType?.toLowerCase() === 'text' || fieldType?.toLowerCase() === 'input' ? 'w-full' : ''
         } ${getValidationClasses()}`}
+        style={{
+          borderColor: theme.inputBorderColor || '#d1d5db',
+          backgroundColor: theme.inputBgColor || '#ffffff',
+        }}
       />
     </div>
   )

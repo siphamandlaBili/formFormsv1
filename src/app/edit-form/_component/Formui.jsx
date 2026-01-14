@@ -26,7 +26,7 @@ import { CSS } from '@dnd-kit/utilities'
 import { GripVertical } from 'lucide-react'
 
 // Sortable Field Item Component
-function SortableFieldItem({ field, index, editingFieldIndex, setEditingFieldIndex, handleUpdateField, handleDeleteField, formState }) {
+function SortableFieldItem({ field, index, editingFieldIndex, setEditingFieldIndex, handleUpdateField, handleDeleteField, formState, theme }) {
   const {
     attributes,
     listeners,
@@ -40,6 +40,9 @@ function SortableFieldItem({ field, index, editingFieldIndex, setEditingFieldInd
     transform: CSS.Transform.toString(transform),
     transition,
     opacity: isDragging ? 0.5 : 1,
+    '--label-color': theme?.labelColor || '#374151',
+    '--input-border-color': theme?.inputBorderColor || '#d1d5db',
+    '--input-bg-color': theme?.inputBgColor || '#ffffff',
   }
 
   const fieldName = field.fieldName || field.name
@@ -54,7 +57,7 @@ function SortableFieldItem({ field, index, editingFieldIndex, setEditingFieldInd
         <GripVertical className="h-5 w-5 text-gray-400 hover:text-gray-600" />
       </div>
       <div className="flex-1">
-        {createField(field, fieldName, formState)}
+        {createField(field, fieldName, formState, theme)}
       </div>
       <div className="pt-8">
         <FieldEdit
@@ -192,7 +195,17 @@ function Formui({ jsonFormData, isLoading = false, onUpdateFormData }) {
   }
 
   return (
-    <div className="">
+    <div 
+      className="rounded-lg p-6"
+      style={{
+        backgroundColor: jsonFormData?.theme?.backgroundColor || '#ffffff',
+        color: jsonFormData?.theme?.textColor || '#000000',
+        '--label-color': jsonFormData?.theme?.labelColor || '#374151',
+        '--input-border-color': jsonFormData?.theme?.inputBorderColor || '#d1d5db',
+        '--input-bg-color': jsonFormData?.theme?.inputBgColor || '#ffffff',
+      }}
+    >
+      {console.log('Formui rendering with theme:', jsonFormData?.theme)}
       <div className="">
         {/* Form Header */}
         <FormHeaderEdit 
@@ -224,6 +237,7 @@ function Formui({ jsonFormData, isLoading = false, onUpdateFormData }) {
                     handleUpdateField={handleUpdateField}
                     handleDeleteField={handleDeleteField}
                     formState={formState}
+                    theme={jsonFormData?.theme}
                   />
                 ))}
               </SortableContext>
@@ -232,6 +246,20 @@ function Formui({ jsonFormData, isLoading = false, onUpdateFormData }) {
             {/* Add Field Component */}
             <div className="pt-4">
               <AddFieldComponent onAddField={handleAddField} />
+            </div>
+
+            {/* Submit Button with Theme */}
+            <div className="mt-6">
+              <button
+                type="submit"
+                className="w-full py-3 px-4 rounded-md font-semibold transition-colors"
+                style={{
+                  backgroundColor: jsonFormData?.theme?.buttonColor || '#3b82f6',
+                  color: jsonFormData?.theme?.buttonTextColor || '#ffffff',
+                }}
+              >
+                Submit
+              </button>
             </div>
 
             {/* Form Actions */}

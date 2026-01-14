@@ -8,7 +8,8 @@ const TextareaField = ({
   onChange, 
   onBlur, 
   hasError, 
-  isFilled 
+  isFilled,
+  theme = {} 
 }) => {
   const getValidationClasses = () => {
     if (hasError) {
@@ -34,7 +35,13 @@ const TextareaField = ({
 
   return (
     <div className="relative">
-      <Textarea {...commonProps} />
+      <Textarea 
+        {...commonProps}
+        style={{
+          borderColor: theme.inputBorderColor || '#d1d5db',
+          backgroundColor: theme.inputBgColor || '#ffffff',
+        }}
+      />
       {isFilled && !hasError && (
         <CheckCircle2 className="absolute right-3 top-3 h-4 w-4 text-green-500" />
       )}

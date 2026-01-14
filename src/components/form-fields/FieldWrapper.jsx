@@ -5,7 +5,8 @@ const FieldWrapper = ({
   field, 
   fieldName, 
   error, 
-  touched 
+  touched,
+  theme = {} 
 }) => {
   const hasError = error && touched
 
@@ -15,7 +16,8 @@ const FieldWrapper = ({
         <div className="space-y-1">
           <label 
             htmlFor={fieldName} 
-            className="text-sm font-medium text-gray-900"
+            className="text-sm font-medium"
+            style={{ color: theme.labelColor || '#374151' }}
           >
             {field.label || field.fieldLabel || fieldName}
             {field.required && <span className="text-red-500 ml-1">*</span>}

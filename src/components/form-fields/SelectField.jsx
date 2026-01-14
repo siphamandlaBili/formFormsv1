@@ -6,7 +6,8 @@ const SelectField = ({
   value, 
   onChange, 
   hasError, 
-  isFilled 
+  isFilled,
+  theme = {} 
 }) => {
   return (
     <Select 
@@ -21,6 +22,10 @@ const SelectField = ({
               ? 'border-green-500 focus-visible:border-green-500'
               : ''
         }`}
+        style={{
+          borderColor: theme.inputBorderColor || '#d1d5db',
+          backgroundColor: theme.inputBgColor || '#ffffff',
+        }}
       >
         <SelectValue placeholder={field.placeholder || "Select an option"} />
       </SelectTrigger>
