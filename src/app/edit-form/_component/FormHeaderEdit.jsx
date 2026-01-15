@@ -4,7 +4,7 @@ import { Textarea } from '@/components/ui/textarea'
 import { Button } from '@/components/ui/button'
 import { toast } from 'sonner'
 
-function FormHeaderEdit({ jsonFormData, onUpdateFormData }) {
+function FormHeaderEdit({ jsonFormData, onUpdateFormData, theme = {} }) {
     const [editingField, setEditingField] = useState(null)
     const [title, setTitle] = useState('')
     const [subheading, setSubheading] = useState('')
@@ -102,6 +102,7 @@ function FormHeaderEdit({ jsonFormData, onUpdateFormData }) {
                 data-editable={field}
                 className={className}
                 onClick={() => startEdit(field)}
+                style={{ color: theme.textColor || undefined }}
             >
                 {value || placeholder}
             </DisplayComponent>

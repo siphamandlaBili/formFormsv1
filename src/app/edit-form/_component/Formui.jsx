@@ -211,6 +211,7 @@ function Formui({ jsonFormData, isLoading = false, onUpdateFormData }) {
         <FormHeaderEdit 
           jsonFormData={jsonFormData} 
           onUpdateFormData={onUpdateFormData}
+          theme={jsonFormData?.theme}
         />
 
         <Separator />
