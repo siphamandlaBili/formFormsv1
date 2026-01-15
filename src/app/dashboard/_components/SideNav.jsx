@@ -1,13 +1,14 @@
 "use client"
 import { useEffect } from 'react'
 import { menuList } from '@/data/data'
-import { usePathname } from 'next/navigation'
+import { usePathname, useRouter } from 'next/navigation'
 import { Progress } from '@/components/ui/progress';
 import CreateFormButton from '@/components/CreateFormButton';
 
 function SideNav() {
 
     const path = usePathname();
+    const router = useRouter();
 
     return (
         <div className='h-screen bg-white/95 backdrop-blur-lg shadow-xl border-r border-gray-200/50'>
@@ -15,13 +16,15 @@ function SideNav() {
             <div className='p-4'>
                 {menuList.map((menu, index) => (
                     <div key={index} className="relative group">
-                        <h2 className={`flex items-center gap-3 lg:p-4 p-2 mb-1 text-gray-700 rounded-xl cursor-pointer transition-all duration-300 lg:justify-start justify-center transform hover:scale-105
-                        ${path == menu.path 
-                            ? 'bg-linear-to-r from-primary to-primary/80 text-white shadow-lg' 
-                            : 'hover:bg-linear-to-r hover:from-primary/10 hover:to-primary/5 hover:text-primary'
-                        }
-                        `}
-                        style={{ animationDelay: `${index * 100}ms` }}
+                        <h2 
+                            onClick={() => router.push(menu.path)}
+                            className={`flex items-center gap-3 lg:p-4 p-2 mb-1 text-gray-700 rounded-xl cursor-pointer transition-all duration-300 lg:justify-start justify-center transform hover:scale-105
+                            ${path == menu.path 
+                                ? 'bg-linear-to-r from-primary to-primary/80 text-white shadow-lg' 
+                                : 'hover:bg-linear-to-r hover:from-primary/10 hover:to-primary/5 hover:text-primary'
+                            }
+                            `}
+                            style={{ animationDelay: `${index * 100}ms` }}
                         >
                             <menu.icon className="shrink-0 transition-transform duration-300 group-hover:scale-110" />
                             <span className="lg:block hidden transition-all duration-300">{menu.name}</span>

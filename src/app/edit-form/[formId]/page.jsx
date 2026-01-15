@@ -9,13 +9,20 @@ import { ArrowLeft, Eye, Share2 } from "lucide-react"
 import { useRouter } from "next/navigation"
 import Formui from "../_component/Formui"
 import ThemeController from "../_component/ThemeController"
+import FormSettings from "../_component/FormSettings"
 import { toast } from "sonner"
 import { Button } from "@/components/ui/button"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 
 function EditForm({ params }) {
     const { user } = useUser()
     const resolvedParams = use(params)
     const [jsonFormData, setJsonFormData] = useState(null);
+    const [formSettings, setFormSettings] = useState({ 
+        requireAuth: false,
+        acceptResponses: true,
+        closeDate: null
+    });
     const [isLoading, setIsLoading] = useState(true);
     const router = useRouter();
 
@@ -36,10 +43,41 @@ function EditForm({ params }) {
             .where(and(eq(jsonForms.id, Number(resolvedParams.formId)), eq(jsonForms.createdBy, user.primaryEmailAddress.emailAddress)));
             
             setJsonFormData(JSON.parse(result[0]?.jsonForm));
+            setFormSettings({ 
+                requireAuth: result[0]?.requireAuth || false,
+                acceptResponses: result[0]?.acceptResponses !== false,
+                closeDate: result[0]?.closeDate || null
+            });
         } catch (error) {
             toast.error('Error fetching form data');
         } finally {
             setIsLoading(false);
+        }
+    }
+
+    const updateFormSettings = async (updatedSettings) => {
+        setFormSettings(updatedSettings);
+        
+        try {
+            if (!resolvedParams?.formId || !user?.primaryEmailAddress?.emailAddress) {
+                toast.error('Missing required data for update');
+                return;
+            }
+
+            await db.update(jsonForms)
+                .set({ 
+                    requireAuth: updatedSettings.requireAuth,
+                    acceptResponses: updatedSettings.acceptResponses,
+                    closeDate: updatedSettings.closeDate
+                })
+                .where(and(
+                    eq(jsonForms.id, Number(resolvedParams.formId)), 
+                    eq(jsonForms.createdBy, user.primaryEmailAddress.emailAddress)
+                ));
+            
+            toast.success('Settings updated successfully!');
+        } catch (error) {
+            toast.error('Failed to update settings');
         }
     }
 
@@ -75,7 +113,7 @@ function EditForm({ params }) {
     return (
         <div className="px-10">
             <div className="flex items-center justify-between my-5">
-                <button onClick={() => router.back()} className="flex gap-2 items-center cursor-pointer hover:font-semibold">
+                <button onClick={() => router.push('/dashboard')} className="flex gap-2 items-center cursor-pointer hover:font-semibold">
                     <ArrowLeft /> Back
                 </button>
                 <div className="flex gap-3">
@@ -104,11 +142,25 @@ function EditForm({ params }) {
                 </div>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4 h-[calc(100vh-120px)]">
-                <div className="p-5 border rounded-lg shadow-md overflow-hidden">
-                    <ThemeController 
-                        jsonFormData={jsonFormData}
-                        onUpdateFormData={updateFormData}
-                    />
+                <div className="border rounded-lg shadow-md overflow-hidden">
+                    <Tabs defaultValue="theme" className="h-full flex flex-col">
+                        <TabsList className="w-full grid grid-cols-2 rounded-none">
+                            <TabsTrigger value="theme">Theme</TabsTrigger>
+                            <TabsTrigger value="settings">Settings</TabsTrigger>
+                        </TabsList>
+                        <TabsContent value="theme" className="flex-1 overflow-hidden p-5">
+                            <ThemeController 
+                                jsonFormData={jsonFormData}
+                                onUpdateFormData={updateFormData}
+                            />
+                        </TabsContent>
+                        <TabsContent value="settings" className="flex-1 overflow-hidden p-5">
+                            <FormSettings
+                                formSettings={formSettings}
+                                onUpdateSettings={updateFormSettings}
+                            />
+                        </TabsContent>
+                    </Tabs>
                 </div>
                 <div className="md:col-span-2 border rounded-lg overflow-hidden flex flex-col">
                     <div className="flex-1 overflow-y-auto p-5">

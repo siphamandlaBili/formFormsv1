@@ -10,12 +10,17 @@ import { useFormValidation } from "@/hooks/useFormValidation"
 import { createField } from "@/utils/fieldFactory"
 import { Separator } from "@/components/ui/separator"
 import { toast } from "sonner"
-import { CheckCircle2 } from "lucide-react"
+import { CheckCircle2, Shield, XCircle } from "lucide-react"
+import { useUser, SignInButton } from "@clerk/nextjs"
 
 function FormPage({ params }) {
+    const { user, isLoaded } = useUser()
     const resolvedParams = use(params)
     const [jsonFormData, setJsonFormData] = useState(null)
     const [formCreator, setFormCreator] = useState(null)
+    const [requireAuth, setRequireAuth] = useState(false)
+    const [acceptResponses, setAcceptResponses] = useState(true)
+    const [closeDate, setCloseDate] = useState(null)
     const [isLoading, setIsLoading] = useState(true)
     const [isSubmitting, setIsSubmitting] = useState(false)
     const [isSubmitted, setIsSubmitted] = useState(false)
@@ -41,6 +46,9 @@ function FormPage({ params }) {
             if (result.length > 0) {
                 setJsonFormData(JSON.parse(result[0]?.jsonForm))
                 setFormCreator(result[0]?.createdBy)
+                setRequireAuth(result[0]?.requireAuth || false)
+                setAcceptResponses(result[0]?.acceptResponses !== false)
+                setCloseDate(result[0]?.closeDate)
             } else {
                 toast.error('Form not found')
             }
@@ -80,6 +88,7 @@ function FormPage({ params }) {
                 formId: Number(resolvedParams.formId),
                 response: JSON.stringify(response),
                 createdBy: formCreator,
+                respondentEmail: user?.primaryEmailAddress?.emailAddress || null,
                 submittedAt: new Date().toISOString()
             })
 
@@ -99,7 +108,7 @@ function FormPage({ params }) {
         formState.clearForm()
     }
 
-    if (isLoading) {
+    if (isLoading || !isLoaded) {
         return (
             <div className="min-h-screen flex items-center justify-center bg-gray-50">
                 <div className="text-center">
@@ -124,6 +133,101 @@ function FormPage({ params }) {
                         className="w-64 h-64 object-contain mx-auto"
                     />
                     <p className="mt-4 text-gray-500">Form not found</p>
+                </div>
+            </div>
+        )
+    }
+
+    // Check if authentication is required and user is not signed in
+    if (requireAuth && !user) {
+        const theme = jsonFormData?.theme || {}
+        
+        return (
+            <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+                <div className="max-w-md mx-auto px-6 py-12">
+                    <div 
+                        className="rounded-lg shadow-lg p-8 text-center"
+                        style={{
+                            backgroundColor: theme.backgroundColor || '#ffffff',
+                        }}
+                    >
+                        <div className="mb-6">
+                            <Shield 
+                                className="h-16 w-16 mx-auto" 
+                                style={{ color: theme.accentColor || '#3b82f6' }}
+                            />
+                        </div>
+                        <h2 
+                            className="text-2xl font-bold mb-4"
+                            style={{ color: theme.textColor || '#1f2937' }}
+                        >
+                            Authentication Required
+                        </h2>
+                        <p 
+                            className="text-base mb-8"
+                            style={{ color: theme.textColor || '#4b5563' }}
+                        >
+                            You need to sign in to submit this form.
+                        </p>
+                        <SignInButton mode="modal">
+                            <Button
+                                className="w-full"
+                                style={{
+                                    backgroundColor: theme.buttonColor || '#3b82f6',
+                                    color: theme.buttonTextColor || '#ffffff',
+                                }}
+                            >
+                                Sign In to Continue
+                            </Button>
+                        </SignInButton>
+                    </div>
+                </div>
+            </div>
+        )
+    }
+
+    // Check if form is closed (either manually or by date)
+    const isFormClosed = !acceptResponses || (closeDate && new Date(closeDate) < new Date())
+
+    if (isFormClosed && !isSubmitted) {
+        const theme = jsonFormData?.theme || {}
+        
+        return (
+            <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+                <div className="max-w-md mx-auto px-6 py-12">
+                    <div 
+                        className="rounded-lg shadow-lg p-8 text-center"
+                        style={{
+                            backgroundColor: theme.backgroundColor || '#ffffff',
+                        }}
+                    >
+                        <div className="mb-6">
+                            <XCircle 
+                                className="h-16 w-16 mx-auto" 
+                                style={{ color: theme.accentColor || '#ef4444' }}
+                            />
+                        </div>
+                        <h2 
+                            className="text-2xl font-bold mb-4"
+                            style={{ color: theme.textColor || '#1f2937' }}
+                        >
+                            Form Closed
+                        </h2>
+                        <p 
+                            className="text-base mb-2"
+                            style={{ color: theme.textColor || '#4b5563' }}
+                        >
+                            This form is no longer accepting responses.
+                        </p>
+                        {closeDate && new Date(closeDate) < new Date() && (
+                            <p 
+                                className="text-sm"
+                                style={{ color: theme.textColor || '#6b7280' }}
+                            >
+                                This form closed on {new Date(closeDate).toLocaleString()}
+                            </p>
+                        )}
+                    </div>
                 </div>
             </div>
         )
