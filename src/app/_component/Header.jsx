@@ -5,10 +5,17 @@ import { useState } from 'react'
 import { links } from '@/data/data'
 import { SignInButton, UserButton, useUser } from '@clerk/nextjs'
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 
 function Header() {
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
     const {isSignedIn } = useUser();
+    const pathname = usePathname();
+
+    // Hide header on shared form pages
+    if (pathname?.startsWith('/form/')) {
+        return null;
+    }
 
     return (
         <header className='relative w-full bg-white shadow-sm border-b'>
