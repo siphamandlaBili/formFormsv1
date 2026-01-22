@@ -4,9 +4,8 @@ import { useEffect, useState } from 'react'
 import { useParams, useRouter } from 'next/navigation'
 import { db } from '@/configs'
 import { jsonForms, formResponses } from '@/configs/schema'
-import { eq, and } from 'drizzle-orm'
+import { eq } from 'drizzle-orm'
 import { ChevronLeft, User, Circle, Paperclip } from 'lucide-react'
-import { Button } from '@/components/ui/button'
 
 function ResponseDetailsPage() {
     const params = useParams()
@@ -37,9 +36,17 @@ function ResponseDetailsPage() {
                 const parsedJson = JSON.parse(formResult.jsonForm)
                 const parsedResponse = JSON.parse(responseResult.response)
                 
+                // Mark as viewed if not already viewed
+                if (!responseResult.viewed) {
+                    await db.update(formResponses)
+                        .set({ viewed: true })
+                        .where(eq(formResponses.id, responseId))
+                }
+                
                 setResponse({
                     ...responseResult,
-                    parsedResponse: parsedResponse.responses || parsedResponse
+                    parsedResponse: parsedResponse.responses || parsedResponse,
+                    viewed: true
                 })
                 
                 setForm({
@@ -147,13 +154,6 @@ function ResponseDetailsPage() {
                             )}
                         </div>
                     ))}
-                </div>
-
-                {/* Action Button */}
-                <div className="mt-8 pt-6 border-t">
-                    <Button className="bg-primary hover:bg-primary/90 text-white px-8">
-                        Mark as Reviewed
-                    </Button>
                 </div>
             </div>
         </div>

@@ -61,6 +61,14 @@ function FormResponsesPage() {
     const getFilteredResponses = () => {
         let filtered = responses
         
+        // Filter by view status
+        if (filter === 'new') {
+            filtered = filtered.filter(response => !response.viewed)
+        } else if (filter === 'viewed') {
+            filtered = filtered.filter(response => response.viewed)
+        }
+        
+        // Filter by search query
         if (searchQuery) {
             filtered = filtered.filter(response => 
                 response.respondentEmail?.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -157,14 +165,14 @@ function FormResponsesPage() {
                         New
                     </button>
                     <button
-                        onClick={() => setFilter('reviewed')}
+                        onClick={() => setFilter('viewed')}
                         className={`px-3 py-1.5 rounded-md text-sm font-medium transition-colors ${
-                            filter === 'reviewed' 
+                            filter === 'viewed' 
                                 ? 'bg-primary text-white' 
                                 : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
                         }`}
                     >
-                        Reviewed
+                        Viewed
                     </button>
                 </div>
             </div>
@@ -205,9 +213,9 @@ function FormResponsesPage() {
                                             {response.respondentEmail?.split('@')[0] || 'Anonymous'}
                                         </span>
                                         <span className={`text-xs px-2 py-0.5 rounded-full ${
-                                            idx < 2 ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-600'
+                                            response.viewed ? 'bg-gray-100 text-gray-600' : 'bg-green-100 text-green-700'
                                         }`}>
-                                            {idx < 2 ? 'New' : 'Reviewed'}
+                                            {response.viewed ? 'Viewed' : 'New'}
                                         </span>
                                     </div>
                                     <div className="flex gap-4 text-sm text-gray-500">

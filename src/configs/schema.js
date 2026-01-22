@@ -17,4 +17,5 @@ export const formResponses = pgTable("formResponses",{
     createdBy:varchar("created_by"),
     respondentEmail:varchar("respondent_email"),
     submittedAt:varchar("submitted_at").notNull(),
+    viewed:boolean("viewed").default(false),
 })
