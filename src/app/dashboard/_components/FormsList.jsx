@@ -74,51 +74,88 @@ function FormsList() {
 
     return (
         <div className="py-6">
-            {/* View Toggle */}
-            <div className="flex justify-end mb-4">
-                <div className="inline-flex rounded-lg border border-gray-200 p-1">
-                    <button
-                        onClick={() => setViewMode('grid')}
-                        className={`px-3 py-2 rounded-md flex items-center gap-2 transition-colors ${
-                            viewMode === 'grid' 
-                                ? 'bg-primary text-white' 
-                                : 'text-gray-600 hover:bg-gray-100'
-                        }`}
+            {/* Grid view on extra small screens only */}
+            <div className="sm:hidden grid grid-cols-1 gap-6">
+                {forms.map((form) => (
+                    <div
+                        key={form.id}
+                        className="border rounded-lg p-6 hover:shadow-lg transition-shadow bg-white"
                     >
-                        <Grid3x3 size={18} />
-                        Grid
-                    </button>
-                    <button
-                        onClick={() => setViewMode('list')}
-                        className={`px-3 py-2 rounded-md flex items-center gap-2 transition-colors ${
-                            viewMode === 'list' 
-                                ? 'bg-primary text-white' 
-                                : 'text-gray-600 hover:bg-gray-100'
-                        }`}
-                    >
-                        <List size={18} />
-                        List
-                    </button>
-                </div>
+                        <div className="flex justify-between items-start mb-4">
+                            <div className="flex-1">
+                                <h3 className="font-semibold text-lg mb-1 truncate">
+                                    {form.formTitle || 'Untitled Form'}
+                                </h3>
+                                <p className="text-sm text-gray-500">
+                                    Created {formatDate(form.createdAt)}
+                                </p>
+                            </div>
+                            {form.acceptResponses === false && (
+                                <span className="text-xs bg-red-100 text-red-600 px-2 py-1 rounded">
+                                    Closed
+                                </span>
+                            )}
+                            {form.acceptResponses !== false && form.closeDate && new Date(form.closeDate) < new Date() && (
+                                <span className="text-xs bg-red-100 text-red-600 px-2 py-1 rounded">
+                                    Closed
+                                </span>
+                            )}
+                        </div>
+                        
+                        {form.formSubheading && (
+                            <p className="text-sm text-gray-600 mb-4 line-clamp-2">
+                                {form.formSubheading}
+                            </p>
+                        )}
+
+                        <div className="flex gap-2 mt-4">
+                            <Button
+                                type="button"
+                                onClick={() => router.push(`/edit-form/${form.id}`)}
+                                variant="outline"
+                                size="sm"
+                                className="flex-1"
+                            >
+                                <Edit size={16} />
+                            </Button>
+                            <Button
+                                type="button"
+                                onClick={() => router.push(`/preview/${form.id}`)}
+                                variant="outline"
+                                size="sm"
+                                title="Preview"
+                            >
+                                <Eye size={16} />
+                            </Button>
+                            <Button
+                                type="button"
+                                onClick={() => {
+                                    navigator.clipboard.writeText(`${window.location.origin}/form/${form.id}`)
+                                    alert('Form link copied to clipboard!')
+                                }}
+                                variant="outline"
+                                size="sm"
+                                title="Share"
+                            >
+                                <Share2 size={16} />
+                            </Button>
+                        </div>
+                    </div>
+                ))}
             </div>
 
-            {/* Forms Display */}
-            {viewMode === 'grid' ? (
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    {forms.map((form) => (
-                        <div
-                            key={form.id}
-                            className="border rounded-lg p-6 hover:shadow-lg transition-shadow bg-white"
-                        >
-                            <div className="flex justify-between items-start mb-4">
-                                <div className="flex-1">
-                                    <h3 className="font-semibold text-lg mb-1 truncate">
-                                        {form.formTitle || 'Untitled Form'}
-                                    </h3>
-                                    <p className="text-sm text-gray-500">
-                                        Created {formatDate(form.createdAt)}
-                                    </p>
-                                </div>
+            {/* List view on small screens and up */}
+            <div className="hidden sm:block space-y-3">
+                {forms.map((form) => (
+                    <div
+                        key={form.id}
+                        className="border rounded-lg p-4 hover:shadow-md transition-shadow bg-white flex items-center justify-between"
+                    >
+                        <div className="flex-1">
+                            <div className="flex items-center gap-3">
+                                <h3 className="font-semibold text-lg">
+                                    {form.formTitle || 'Untitled Form'}
+                                </h3>
                                 {form.acceptResponses === false && (
                                     <span className="text-xs bg-red-100 text-red-600 px-2 py-1 rounded">
                                         Closed
@@ -130,116 +167,49 @@ function FormsList() {
                                     </span>
                                 )}
                             </div>
-                            
-                            {form.formSubheading && (
-                                <p className="text-sm text-gray-600 mb-4 line-clamp-2">
-                                    {form.formSubheading}
-                                </p>
-                            )}
-
-                            <div className="flex gap-2 mt-4">
-                                <Button
-                                    type="button"
-                                    onClick={() => router.push(`/edit-form/${form.id}`)}
-                                    variant="outline"
-                                    size="sm"
-                                    className="flex-1"
-                                >
-                                    <Edit size={16} className="mr-1" />
-                                    Edit
-                                </Button>
-                                <Button
-                                    type="button"
-                                    onClick={() => router.push(`/preview/${form.id}`)}
-                                    variant="outline"
-                                    size="sm"
-                                    title="Preview"
-                                >
-                                    <Eye size={16} />
-                                </Button>
-                                <Button
-                                    type="button"
-                                    onClick={() => {
-                                        navigator.clipboard.writeText(`${window.location.origin}/form/${form.id}`)
-                                        alert('Form link copied to clipboard!')
-                                    }}
-                                    variant="outline"
-                                    size="sm"
-                                    title="Share"
-                                >
-                                    <Share2 size={16} />
-                                </Button>
+                            <div className="flex gap-4 mt-1 text-sm text-gray-500">
+                                <span>Created {formatDate(form.createdAt)}</span>
+                                {form.formSubheading && (
+                                    <span className="hidden lg:inline truncate max-w-md">{form.formSubheading}</span>
+                                )}
                             </div>
                         </div>
-                    ))}
-                </div>
-            ) : (
-                <div className="space-y-3">
-                    {forms.map((form) => (
-                        <div
-                            key={form.id}
-                            className="border rounded-lg p-4 hover:shadow-md transition-shadow bg-white flex items-center justify-between"
-                        >
-                            <div className="flex-1">
-                                <div className="flex items-center gap-3">
-                                    <h3 className="font-semibold text-lg">
-                                        {form.formTitle || 'Untitled Form'}
-                                    </h3>
-                                    {form.acceptResponses === false && (
-                                        <span className="text-xs bg-red-100 text-red-600 px-2 py-1 rounded">
-                                            Closed
-                                        </span>
-                                    )}
-                                    {form.acceptResponses !== false && form.closeDate && new Date(form.closeDate) < new Date() && (
-                                        <span className="text-xs bg-red-100 text-red-600 px-2 py-1 rounded">
-                                            Closed
-                                        </span>
-                                    )}
-                                </div>
-                                <div className="flex gap-4 mt-1 text-sm text-gray-500">
-                                    <span>Created {formatDate(form.createdAt)}</span>
-                                    {form.formSubheading && (
-                                        <span className="truncate max-w-md">{form.formSubheading}</span>
-                                    )}
-                                </div>
-                            </div>
-                            
-                            <div className="flex gap-2">
-                                <Button
-                                    type="button"
-                                    onClick={() => router.push(`/edit-form/${form.id}`)}
-                                    variant="outline"
-                                    size="sm"
-                                >
-                                    <Edit size={16} className="mr-1" />
-                                    Edit
-                                </Button>
-                                <Button
-                                    type="button"
-                                    onClick={() => router.push(`/preview/${form.id}`)}
-                                    variant="outline"
-                                    size="sm"
-                                >
-                                    <Eye size={16} className="mr-1" />
-                                    Preview
-                                </Button>
-                                <Button
-                                    type="button"
-                                    onClick={() => {
-                                        navigator.clipboard.writeText(`${window.location.origin}/form/${form.id}`)
-                                        alert('Form link copied to clipboard!')
-                                    }}
-                                    variant="outline"
-                                    size="sm"
-                                >
-                                    <Share2 size={16} className="mr-1" />
-                                    Share
-                                </Button>
-                            </div>
+                        
+                        <div className="flex gap-2">
+                            <Button
+                                type="button"
+                                onClick={() => router.push(`/edit-form/${form.id}`)}
+                                variant="outline"
+                                size="sm"
+                            >
+                                <Edit size={16} className="lg:mr-1" />
+                                <span className="hidden lg:inline">Edit</span>
+                            </Button>
+                            <Button
+                                type="button"
+                                onClick={() => router.push(`/preview/${form.id}`)}
+                                variant="outline"
+                                size="sm"
+                            >
+                                <Eye size={16} className="lg:mr-1" />
+                                <span className="hidden lg:inline">Preview</span>
+                            </Button>
+                            <Button
+                                type="button"
+                                onClick={() => {
+                                    navigator.clipboard.writeText(`${window.location.origin}/form/${form.id}`)
+                                    alert('Form link copied to clipboard!')
+                                }}
+                                variant="outline"
+                                size="sm"
+                            >
+                                <Share2 size={16} className="lg:mr-1" />
+                                <span className="hidden lg:inline">Share</span>
+                            </Button>
                         </div>
-                    ))}
-                </div>
-            )}
+                    </div>
+                ))}
+            </div>
         </div>
     )
 }

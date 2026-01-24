@@ -20,8 +20,8 @@ function SideNav() {
                             onClick={() => router.push(menu.path)}
                             className={`flex items-center gap-3 lg:p-4 p-2 mb-1 text-gray-700 rounded-xl cursor-pointer transition-all duration-300 lg:justify-start justify-center transform hover:scale-105
                             ${path == menu.path 
-                                ? 'bg-linear-to-r from-primary to-primary/80 text-white shadow-lg' 
-                                : 'hover:bg-linear-to-r hover:from-primary/10 hover:to-primary/5 hover:text-primary'
+                                ? 'bg-emerald-600 text-white shadow-lg shadow-emerald-500/25' 
+                                : 'hover:bg-emerald-50 hover:text-emerald-700'
                             }
                             `}
                             style={{ animationDelay: `${index * 100}ms` }}
@@ -43,7 +43,7 @@ function SideNav() {
                 </div>
                 <div className="lg:block hidden">
                     <Progress value={60} className="mt-2 h-2" />
-                    <h2 className='text-xs mt-2 text-gray-600 font-medium'><strong className="text-primary">2 </strong>/<strong>3</strong> Forms Generated</h2>
+                    <h2 className='text-xs mt-2 text-gray-600 font-medium'><strong className="text-emerald-600">2 </strong>/<strong>3</strong> Forms Generated</h2>
                     <h2 className='text-xs mt-1 text-gray-500'>Get Unlimited Access</h2>
                 </div>
             </div>

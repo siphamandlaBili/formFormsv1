@@ -93,8 +93,51 @@ function ResponsesOverview() {
 
     return (
         <div className="py-6 overflow-auto scrollbar-hide">
-            {/* List View */}
-            <div className="space-y-3 pb-20">
+            {/* Grid view on extra small screens only */}
+            <div className="sm:hidden space-y-3 pb-20">
+                {forms.map((form) => (
+                    <div
+                        key={form.id}
+                        className="border rounded-lg p-4 hover:shadow-md transition-shadow bg-white"
+                    >
+                        <h3 className="font-semibold text-lg mb-2">
+                            {form.title}
+                        </h3>
+                        <div className="flex items-center gap-2 mb-3">
+                            {form.acceptResponses === false && (
+                                <span className="text-xs bg-red-100 text-red-600 px-2 py-1 rounded">
+                                    Closed
+                                </span>
+                            )}
+                            {form.acceptResponses !== false && form.closeDate && new Date(form.closeDate) < new Date() && (
+                                <span className="text-xs bg-red-100 text-red-600 px-2 py-1 rounded">
+                                    Closed
+                                </span>
+                            )}
+                            {(form.acceptResponses === true || form.acceptResponses === undefined || form.acceptResponses === null) && (!form.closeDate || new Date(form.closeDate) >= new Date()) && (
+                                <span className="text-xs bg-green-100 text-green-700 px-2 py-1 rounded">
+                                    Open
+                                </span>
+                            )}
+                            <span className="text-sm text-gray-500">
+                                <span className="font-medium text-primary">{form.responseCount} responses</span>
+                            </span>
+                        </div>
+                        <Button
+                            type="button"
+                            onClick={() => router.push(`/dashboard/responses/${form.id}`)}
+                            variant="outline"
+                            size="sm"
+                            className="w-full"
+                        >
+                            <Eye size={16} />
+                        </Button>
+                    </div>
+                ))}
+            </div>
+
+            {/* List view on small screens and up */}
+            <div className="hidden sm:block space-y-3 pb-20">
                 {forms.map((form) => (
                     <div
                         key={form.id}
@@ -122,9 +165,9 @@ function ResponsesOverview() {
                                 )}
                             </div>
                             <div className="flex gap-4 mt-1 text-sm text-gray-500">
-                                <span>Created {formatDate(form.createdAt)}</span>
+                                <span className="hidden lg:inline">Created {formatDate(form.createdAt)}</span>
                                 <span className="font-medium text-primary">{form.responseCount} responses</span>
-                                <span>Last response {getTimeAgo(form.lastResponse)}</span>
+                                <span className="hidden lg:inline">Last response {getTimeAgo(form.lastResponse)}</span>
                             </div>
                         </div>
                         
@@ -135,8 +178,8 @@ function ResponsesOverview() {
                                 variant="outline"
                                 size="sm"
                             >
-                                <Eye size={16} className="mr-1" />
-                                View Responses
+                                <Eye size={16} className="lg:mr-1" />
+                                <span className="hidden lg:inline">View Responses</span>
                             </Button>
                         </div>
                     </div>

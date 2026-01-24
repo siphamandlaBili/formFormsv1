@@ -1,11 +1,13 @@
 import Hero from "./_component/Hero";
-import WhoIsItFor from "./_component/WhoIsItFor";
+import Features from "./_component/Features";
+import CTA from "./_component/Cta";
 
 export default function Home() {
   return (
     <div>
       <Hero/>
-      <WhoIsItFor/>
+      <Features/>
+      <CTA/>
     </div>
   );
 }

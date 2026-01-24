@@ -132,7 +132,7 @@ function FormResponsesPage() {
             </button>
 
             {/* Header Section */}
-            <div className="flex items-start justify-between mb-6">
+            <div className="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-4 mb-6">
                 <div>
                     <h2 className="font-semibold text-2xl text-gray-800 mb-2">{form.title}</h2>
                     <div className="flex items-center gap-2 text-sm text-gray-500">
@@ -196,38 +196,73 @@ function FormResponsesPage() {
                     <p className="text-gray-400 text-sm">Responses will appear here once users submit the form</p>
                 </div>
             ) : (
-                <div className="space-y-3 pb-20">
-                    {getFilteredResponses().map((response, idx) => (
-                        <div
-                            key={response.id}
-                            onClick={() => router.push(`/dashboard/responses/${formId}/${response.id}`)}
-                            className="border rounded-lg p-4 hover:shadow-md transition-shadow bg-white flex items-center justify-between cursor-pointer"
-                        >
-                            <div className="flex items-center gap-4 flex-1">
-                                <div className="w-10 h-10 rounded-full bg-gray-200 flex items-center justify-center flex-shrink-0">
-                                    <User size={20} className="text-gray-600" />
-                                </div>
-                                <div className="flex-1">
-                                    <div className="flex items-center gap-3 mb-1">
-                                        <span className="font-semibold text-gray-900">
-                                            {response.respondentEmail?.split('@')[0] || 'Anonymous'}
-                                        </span>
-                                        <span className={`text-xs px-2 py-0.5 rounded-full ${
-                                            response.viewed ? 'bg-gray-100 text-gray-600' : 'bg-green-100 text-green-700'
-                                        }`}>
-                                            {response.viewed ? 'Viewed' : 'New'}
-                                        </span>
+                <>
+                    {/* Grid view on extra small screens only */}
+                    <div className="sm:hidden space-y-3 pb-20">
+                        {getFilteredResponses().map((response, idx) => (
+                            <div
+                                key={response.id}
+                                onClick={() => router.push(`/dashboard/responses/${formId}/${response.id}`)}
+                                className="border rounded-lg p-4 hover:shadow-md transition-shadow bg-white cursor-pointer"
+                            >
+                                <div className="flex items-center gap-3 mb-3">
+                                    <div className="w-10 h-10 rounded-full bg-gray-200 flex items-center justify-center flex-shrink-0">
+                                        <User size={20} className="text-gray-600" />
                                     </div>
-                                    <div className="flex gap-4 text-sm text-gray-500">
-                                        <span>{response.respondentEmail || 'anonymous'}</span>
-                                        <span>{formatDate(response.submittedAt)} • {formatTime(response.submittedAt)}</span>
-                                        <span>{Object.keys(response.parsedResponse).length} questions answered</span>
+                                    <div className="flex-1">
+                                        <div className="flex items-center gap-2 mb-1">
+                                            <span className="font-semibold text-gray-900">
+                                                {response.respondentEmail?.split('@')[0] || 'Anonymous'}
+                                            </span>
+                                            <span className={`text-xs px-2 py-0.5 rounded-full ${
+                                                response.viewed ? 'bg-gray-100 text-gray-600' : 'bg-green-100 text-green-700'
+                                            }`}>
+                                                {response.viewed ? 'Viewed' : 'New'}
+                                            </span>
+                                        </div>
+                                        <div className="text-xs text-gray-500">
+                                            {formatDate(response.submittedAt)}
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                    ))}
-                </div>
+                        ))}
+                    </div>
+
+                    {/* List view on small screens and up */}
+                    <div className="hidden sm:block space-y-3 pb-20">
+                        {getFilteredResponses().map((response, idx) => (
+                            <div
+                                key={response.id}
+                                onClick={() => router.push(`/dashboard/responses/${formId}/${response.id}`)}
+                                className="border rounded-lg p-4 hover:shadow-md transition-shadow bg-white flex items-center justify-between cursor-pointer"
+                            >
+                                <div className="flex items-center gap-4 flex-1">
+                                    <div className="w-10 h-10 rounded-full bg-gray-200 flex items-center justify-center flex-shrink-0">
+                                        <User size={20} className="text-gray-600" />
+                                    </div>
+                                    <div className="flex-1">
+                                        <div className="flex items-center gap-3 mb-1">
+                                            <span className="font-semibold text-gray-900">
+                                                {response.respondentEmail?.split('@')[0] || 'Anonymous'}
+                                            </span>
+                                            <span className={`text-xs px-2 py-0.5 rounded-full ${
+                                                response.viewed ? 'bg-gray-100 text-gray-600' : 'bg-green-100 text-green-700'
+                                            }`}>
+                                                {response.viewed ? 'Viewed' : 'New'}
+                                            </span>
+                                        </div>
+                                        <div className="flex gap-4 text-sm text-gray-500">
+                                            <span className="hidden lg:inline">{response.respondentEmail || 'anonymous'}</span>
+                                            <span>{formatDate(response.submittedAt)} • {formatTime(response.submittedAt)}</span>
+                                            <span className="hidden lg:inline">{Object.keys(response.parsedResponse).length} questions answered</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                </>
             )}
         </div>
     )

@@ -141,7 +141,7 @@ function EditForm({ params }) {
                     </Button>
                 </div>
             </div>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 h-[calc(100vh-120px)]">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 h-auto md:h-[calc(100vh-120px)]">
                 <div className="border rounded-lg shadow-md overflow-hidden">
                     <Tabs defaultValue="theme" className="h-full flex flex-col">
                         <TabsList className="w-full grid grid-cols-2 rounded-none">
