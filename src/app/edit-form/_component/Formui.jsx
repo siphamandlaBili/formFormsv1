@@ -7,10 +7,80 @@ import FieldEdit from './FieldEdit'
 import FormHeaderEdit from './FormHeaderEdit'
 import AddFieldComponent from './AddFieldComponent'
 import { toast } from 'sonner'
+import {
+  DndContext,
+  closestCenter,
+  KeyboardSensor,
+  PointerSensor,
+  useSensor,
+  useSensors,
+} from '@dnd-kit/core'
+import {
+  arrayMove,
+  SortableContext,
+  sortableKeyboardCoordinates,
+  verticalListSortingStrategy,
+  useSortable,
+} from '@dnd-kit/sortable'
+import { CSS } from '@dnd-kit/utilities'
+import { GripVertical } from 'lucide-react'
+
+// Sortable Field Item Component
+function SortableFieldItem({ field, index, editingFieldIndex, setEditingFieldIndex, handleUpdateField, handleDeleteField, formState }) {
+  const {
+    attributes,
+    listeners,
+    setNodeRef,
+    transform,
+    transition,
+    isDragging,
+  } = useSortable({ id: field.id || `field-${index}` })
+
+  const style = {
+    transform: CSS.Transform.toString(transform),
+    transition,
+    opacity: isDragging ? 0.5 : 1,
+  }
+
+  const fieldName = field.fieldName || field.name
+
+  return (
+    <div
+      ref={setNodeRef}
+      style={style}
+      className={`flex items-start gap-3 ${isDragging ? 'z-50' : ''}`}
+    >
+      <div className="pt-8 cursor-grab active:cursor-grabbing" {...attributes} {...listeners}>
+        <GripVertical className="h-5 w-5 text-gray-400 hover:text-gray-600" />
+      </div>
+      <div className="flex-1">
+        {createField(field, fieldName, formState)}
+      </div>
+      <div className="pt-8">
+        <FieldEdit
+          field={field}
+          fieldName={fieldName}
+          onUpdateField={(updatedField) => handleUpdateField(index, updatedField)}
+          onDeleteField={() => handleDeleteField(index)}
+          isOpen={editingFieldIndex === index}
+          onOpenChange={(open) => setEditingFieldIndex(open ? index : null)}
+        />
+      </div>
+    </div>
+  )
+}
 
 function Formui({ jsonFormData, isLoading = false, onUpdateFormData }) {
   const formState = useFormState()
   const [editingFieldIndex, setEditingFieldIndex] = useState(null)
+
+  // Setup sensors for drag and drop
+  const sensors = useSensors(
+    useSensor(PointerSensor),
+    useSensor(KeyboardSensor, {
+      coordinateGetter: sortableKeyboardCoordinates,
+    })
+  )
 
   // Handle field update
   const handleUpdateField = (fieldIndex, updatedField) => {
@@ -52,7 +122,12 @@ function Formui({ jsonFormData, isLoading = false, onUpdateFormData }) {
   const handleAddField = async (newField) => {
     try {
       if (onUpdateFormData && jsonFormData) {
-        const updatedFields = [...(jsonFormData.fields || []), newField]
+        // Add unique id to new field if it doesn't have one
+        const fieldWithId = {
+          ...newField,
+          id: newField.id || `field-${Date.now()}-${Math.random()}`
+        }
+        const updatedFields = [...(jsonFormData.fields || []), fieldWithId]
         
         const updatedFormData = {
           ...jsonFormData,
@@ -63,6 +138,30 @@ function Formui({ jsonFormData, isLoading = false, onUpdateFormData }) {
       }
     } catch (error) {
       toast.error('Failed to add field')
+    }
+  }
+
+  // Handle drag end
+  const handleDragEnd = async (event) => {
+    const { active, over } = event
+
+    if (over && active.id !== over.id) {
+      const oldIndex = jsonFormData.fields.findIndex(
+        (field) => (field.id || `field-${jsonFormData.fields.indexOf(field)}`) === active.id
+      )
+      const newIndex = jsonFormData.fields.findIndex(
+        (field) => (field.id || `field-${jsonFormData.fields.indexOf(field)}`) === over.id
+      )
+
+      const reorderedFields = arrayMove(jsonFormData.fields, oldIndex, newIndex)
+
+      const updatedFormData = {
+        ...jsonFormData,
+        fields: reorderedFields
+      }
+
+      // Update with silent save (no success toast for drag operations)
+      await onUpdateFormData(updatedFormData, false)
     }
   }
 
@@ -106,26 +205,29 @@ function Formui({ jsonFormData, isLoading = false, onUpdateFormData }) {
         {/* Form Content */}
         <div className="pt-6">
           <form className="space-y-8">
-            {jsonFormData.fields?.map((field, index) => {
-              const fieldName = field.fieldName || field.name
-              return (
-                <div key={index} className="flex items-start justify-between gap-3">
-                  <div className="flex-1">
-                    {createField(field, fieldName, formState)}
-                  </div>
-                  <div className="pt-8">
-                    <FieldEdit 
-                      field={field}
-                      fieldName={fieldName}
-                      onUpdateField={(updatedField) => handleUpdateField(index, updatedField)}
-                      onDeleteField={() => handleDeleteField(index)}
-                      isOpen={editingFieldIndex === index}
-                      onOpenChange={(open) => setEditingFieldIndex(open ? index : null)}
-                    />
-                  </div>
-                </div>
-              )
-            })}
+            <DndContext
+              sensors={sensors}
+              collisionDetection={closestCenter}
+              onDragEnd={handleDragEnd}
+            >
+              <SortableContext
+                items={jsonFormData.fields?.map((field, index) => field.id || `field-${index}`) || []}
+                strategy={verticalListSortingStrategy}
+              >
+                {jsonFormData.fields?.map((field, index) => (
+                  <SortableFieldItem
+                    key={field.id || `field-${index}`}
+                    field={field}
+                    index={index}
+                    editingFieldIndex={editingFieldIndex}
+                    setEditingFieldIndex={setEditingFieldIndex}
+                    handleUpdateField={handleUpdateField}
+                    handleDeleteField={handleDeleteField}
+                    formState={formState}
+                  />
+                ))}
+              </SortableContext>
+            </DndContext>
 
             {/* Add Field Component */}
             <div className="pt-4">
